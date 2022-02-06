@@ -7,18 +7,20 @@ export class Household {
   name: string
   people: Array<Person>
 
-  static create(config, options: { name?: string, size?: number } = {}) {
+  static create(options, config: { name?: string, size?: number } = {}) {
     const name = options.name || uuidv4()
 
     // We need minimum 2 people to form a household
-    const size = options.size || 2
+    const size = config.size || 2
 
     const people = []
     for (let i = 1; i <= size; i++) {
-      people.push(new Person({
-        name: `${name}_${i}`,
-        age: randomNumber(config.age.from, config.age.to)
-      }))
+      const age = randomNumber(options.age.from, options.age.to)
+
+      // Person grows until the age of 20 and begins to age at the age of 35
+      const health = age > 0 ? Math.min(age, 20) * 6 - Math.max(age - 35, 0) * 2 : 1
+
+      people.push(new Person({ name: `${name}_${i}`, age, health }))
     }
 
     return new Household({
@@ -27,18 +29,16 @@ export class Household {
     })
   }
 
-  constructor(config) {
-    this.name = config.name
-    this.people = (config.people || []).map(x => new Person(x))
+  constructor(data) {
+    this.name = data.name
+    this.people = (data.people || []).map(x => new Person(x))
   }
 
   step(events: Array<Event<any>>) {
-    const people = this.people.map(x => x.step(events)).reduce((acc, next) => acc.concat(next), [])
+    const people = this.people.flatMap(x => x.step(events))
+    this.people = people.filter(x => x.health > 0) // Remove dead people
 
-    return new Household({
-      name: this.name,
-      people: people.filter(x => x.health > 0) // Remove dead people
-    })
+    return this
   }
 
   stats(): Stats {

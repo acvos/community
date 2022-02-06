@@ -10,40 +10,24 @@ export class Person {
   age: number
   health: number
 
-  constructor(config) {
+  constructor(config: Partial<Person> = {}) {
     this.name = config.name || uuidv4()
-
     this.sex = config.sex || randomOption(
       { value: "male", weight: 1 },
       { value: "female", weight: 1 }
     )
-
     this.age = config.age || 0
-
-    this.health = config.health
-      // Person grows until the age of 15 and then begins to age
-      || this.age > 0
-        ? Math.min(this.age, 15) * 6 - Math.max(this.age - 15, 0) * 2
-        : 1
+    this.health = config.health || 0
   }
 
   step(events: Array<Event<Person>>) {
-    const results = []
-    const nextVersion = new Person({
-      name: this.name,
-      sex: this.sex,
-      age: this.age + 1,
-      health: this.health
-    })
+    this.age++
 
+    const results = [this]
     for (const event of events) {
-      const { patch, newUnits } = event.affect(this)
-
-      nextVersion.health += patch.health || 0
-      newUnits.forEach(x => results.push(x))
+      const { units } = event.affect(this)
+      units.forEach(x => results.push(x))
     }
-
-    results.push(nextVersion)
 
     return results
   }

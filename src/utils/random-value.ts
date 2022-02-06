@@ -14,7 +14,7 @@ export function randomNumber(from: number, to: number) {
 export function randomOption<T>(...options: Array<Option<T>|T>) {
   const normalizeOption = (x: Option<T>|T) => ({
     value: "value" in x ? x.value : x,
-    weight: "weight" in x ? x.weight : 1 // Default weight for wach option is 1
+    weight: "weight" in x ? x.weight : 1 // Default weight for each option is 1
   })
 
   const weightedValues = []

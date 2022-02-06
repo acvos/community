@@ -1,36 +1,34 @@
-import { Condition, Event, Range } from "../types"
+import map from "poly-map"
+import { Condition, Event, Instantiable } from "../types"
+import { times } from "../utils/times"
+import { ConfigurableValue } from "../utils/configurable-value"
 import { Person } from "../units/person"
-import { randomNumber } from "../utils/random-value"
 
 const unitTypes = {
   Person
 }
 
 export class CreateUnit implements Event<Person> {
-  private unit: string
-  private quantity: number|Range<number>
+  private unitClass: Instantiable<any>
+  private quantity: ConfigurableValue<number>
   private conditions: Condition<Person>
+  private template: {[property: string]: ConfigurableValue<any>}
 
-  constructor({ unit, quantity }, conditions) {
-    this.unit = unit
-    this.quantity = quantity
+  constructor({ unit, quantity, template }, conditions) {
+    this.unitClass = unitTypes[unit]
+    this.quantity = new ConfigurableValue<number>(quantity)
+    this.template = map(x => new ConfigurableValue<any>(x), template)
     this.conditions = conditions
   }
 
   affect(person: Person) {
-    const newUnits = []
+    const units = this.conditions.satisfied(person)
+      ? times(
+          this.quantity.getValue(),
+          () => new this.unitClass(map(x => x.getValue(), this.template))
+        )
+      : []
 
-    if (this.conditions.satisfied(person)) {
-      const numberOfNewUnits = typeof this.quantity === "object"
-        ? randomNumber(this.quantity["from"], this.quantity["to"])
-        : this.quantity
-
-      const Klass =  unitTypes[this.unit]
-      for (let i = 1; i <= numberOfNewUnits; i++) {
-        newUnits.push(new Klass({}))
-      }
-    }
-
-    return { patch: {}, newUnits }
+    return { units }
   }
 }

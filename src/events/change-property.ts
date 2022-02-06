@@ -1,33 +1,24 @@
-import { Condition, Event, Range } from "../types"
+import { Condition, Event } from "../types"
 import { Person } from "../units/person"
-import { randomNumber } from "../utils/random-value"
+import { ConfigurableValue } from "../utils/configurable-value"
 
 export class ChangeProperty implements Event<Person> {
   private property: string
-  private value: number|Range<number>
-  private operation: "increase"|"decrease"
+  private value: ConfigurableValue<number>
   private conditions: Condition<Person>
 
-  constructor({ property, value, operation }, conditions) {
+  constructor({ property, value }, conditions) {
     this.property = property
-    this.value = value
-    this.operation = operation
+    this.value = new ConfigurableValue<number>(value)
     this.conditions = conditions
   }
 
   affect(person: Person) {
-    const result = { patch: {}, newUnits: [] }
-
     if (this.conditions.satisfied(person)) {
-      const change = typeof this.value === "object"
-        ? randomNumber(this.value["from"], this.value["to"])
-        : this.value
-
-      const sign = this.operation === "increase" ? 1 : -1
-
-      result.patch[this.property] = sign * change
+      const change = this.value.getValue()
+      person[this.property] = person[this.property] + change
     }
 
-    return result
+    return { units: [] }
   }
 }

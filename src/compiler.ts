@@ -1,5 +1,5 @@
 import jexl from "jexl"
-import { randomOption } from "../utils/random-value"
+import { randomOption } from "./utils/random-value"
 
 jexl["addFunction"](
   "probability",

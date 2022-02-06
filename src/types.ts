@@ -1,3 +1,5 @@
+export type Instantiable<T = any> = new (...args: any[]) => T
+
 export interface Stats {
   population: number
   males: number
@@ -14,8 +16,7 @@ export interface Condition<T> {
 }
 
 export interface EventResult<T> {
-  patch: Partial<T>
-  newUnits: Array<any>
+  units: Array<any>
 }
 
 export interface Event<T> {

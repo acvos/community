@@ -1,5 +1,5 @@
 import { Event } from "../types"
-import { ScriptCondition } from "./script-condition"
+import { ScriptCondition } from "../script-condition"
 import { CreateUnit } from "./create-unit"
 import { ChangeProperty } from "./change-property"
 
