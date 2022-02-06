@@ -1,5 +1,5 @@
 import Expression from "jexl/Expression"
-import { Condition } from "./types"
+import { Condition } from "../types"
 import { compiler } from "./compiler"
 
 export class ScriptCondition<T> implements Condition<T> {

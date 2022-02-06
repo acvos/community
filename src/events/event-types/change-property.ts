@@ -1,6 +1,6 @@
-import { Condition, Event } from "../types"
-import { Person } from "../units/person"
-import { ConfigurableValue } from "../utils/configurable-value"
+import { Condition, Event } from "../../types"
+import { Person } from "../../units/person"
+import { ConfigurableValue } from "../configurable-value"
 
 export class ChangeProperty implements Event<Person> {
   private property: string

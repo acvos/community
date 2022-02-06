@@ -1,8 +1,8 @@
 import map from "poly-map"
-import { Condition, Event, Instantiable } from "../types"
-import { times } from "../utils/times"
-import { ConfigurableValue } from "../utils/configurable-value"
-import { Person } from "../units/person"
+import { Condition, Event, Instantiable } from "../../types"
+import { times } from "../../utils/times"
+import { ConfigurableValue } from "../configurable-value"
+import { Person } from "../../units/person"
 
 const unitTypes = {
   Person

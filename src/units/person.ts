@@ -9,6 +9,7 @@ export class Person {
   sex: Sex
   age: number
   health: number
+  experience: number
 
   constructor(config: Partial<Person> = {}) {
     this.name = config.name || uuidv4()
@@ -18,6 +19,7 @@ export class Person {
     )
     this.age = config.age || 0
     this.health = config.health || 0
+    this.experience = config.experience || 0
   }
 
   step(events: Array<Event<Person>>) {
