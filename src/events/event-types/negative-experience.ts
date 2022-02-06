@@ -15,8 +15,9 @@ export class NegativeExperience implements Event<Person> {
 
   affect(person: Person) {
     if (this.conditions.satisfied(person)) {
-      const change = person.experience - this.value.getValue()
+      const change = this.value.getValue() - person.experience
       const normalizedChange = change > 0 ? change : 0
+
       person[this.property] = person[this.property] - normalizedChange
       person.experience++
     }
