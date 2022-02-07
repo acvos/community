@@ -1,28 +1,9 @@
-import { v4 as uuidv4 } from "uuid"
 import { Event, Stats } from "../types"
-import { randomNumber } from "../utils/random-value"
 import { Household } from "./household"
 
 export class Community {
   name: string
   households: Array<Household>
-
-  static create(seedConfig, options: { name?: string } = {}) {
-    const name = options.name || uuidv4()
-
-    const households = []
-    for (let i = 1; i <= seedConfig.households; i++) {
-      households.push(Household.create(seedConfig, {
-        name: `${name}_${i}`,
-        size: randomNumber(seedConfig.household_size.from, seedConfig.household_size.to)
-      }))
-    }
-
-    return new Community({
-      name,
-      households
-    })
-  }
 
   constructor(config) {
     this.name = config.name
