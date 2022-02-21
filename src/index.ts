@@ -17,20 +17,19 @@ function run(configPath, command) {
   const name = command.name
   const runs = parseInt(command.runs)
   const years = parseInt(command.years)
-  const seed = new UnitGenerator(config.seed)
+  const model = new UnitGenerator(config.seed)
+  const step = config.seed.years_per_step
 
   console.log(`Simulating ${name} ${runs} times...`)
 
   for (let run = 1; run <= runs; run++) {
-    let model = seed.createCommunity(`${name}_${run}`)
-    console.log(util.inspect(model, false, 1000, true))
-    // let year = 0
-    // while (year < years) {
-    //   model = model.step(events)
-    //   year++
-    // }
+    let community = model.createCommunity(`${name}_${run}`)
+    for (let year = 0; year < years; year += step) {
+      community.run(step)
+      console.log(util.inspect(community, false, 1000, true))
+    }
 
-    // console.log(`Run ${run}, Year ${year}`, model.stats())
+    console.log(`Run ${run}, Year ${years}`, community.stats())
   }
 }
 
