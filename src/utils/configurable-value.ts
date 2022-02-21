@@ -1,5 +1,5 @@
 import { Range } from "../types"
-import { randomNumber } from "../utils/random-value"
+import { randomNumber } from "./random-value"
 
 export class ConfigurableValue<T> {
   private config: T|Range<T>

@@ -1,11 +1,11 @@
 import { Condition, Event } from "../../types"
-import { Person } from "../../units/person"
-import { ConfigurableValue } from "../configurable-value"
+import { Household } from "../../units/community"
+import { ConfigurableValue } from "../../utils/configurable-value"
 
-export class ChangeProperty implements Event<Person> {
+export class ChangeProperty implements Event<Household> {
   private property: string
   private value: ConfigurableValue<number>
-  private conditions: Condition<Person>
+  private conditions: Condition<Household>
 
   constructor({ property, value }, conditions) {
     this.property = property
@@ -13,12 +13,10 @@ export class ChangeProperty implements Event<Person> {
     this.conditions = conditions
   }
 
-  affect(person: Person) {
-    if (this.conditions.satisfied(person)) {
+  affect(household: Household) {
+    if (this.conditions.satisfied(household)) {
       const change = this.value.getValue()
       person[this.property] = person[this.property] + change
     }
-
-    return { units: [] }
   }
 }

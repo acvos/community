@@ -1,35 +1,31 @@
-import { Event, Stats } from "../types"
-import { Household } from "./household"
+import { Stats } from "../utils/stats"
+import { Cohort } from "./cohort"
+
+interface HouseholdData {
+  name: string
+  numberOfHouseholds: number
+  cohorts: Array<Cohort>
+}
 
 export class Community {
   name: string
-  households: Array<Household>
+  numberOfHouseholds: number
+  cohorts: Array<Cohort>
 
-  constructor(config) {
-    this.name = config.name
-    this.households = (config.households || []).map(x => new Household(x))
+  constructor({ name, numberOfHouseholds, cohorts }: HouseholdData) {
+    this.name = name
+    this.numberOfHouseholds = numberOfHouseholds
+    this.cohorts = [...cohorts]
   }
 
-  step(events: Array<Event<any>>) {
-    return new Community({
-      name: this.name,
-      households: this.households.map(x => x.step(events))
-    })
-  }
 
-  stats(): Stats {
-    return this.households.reduce((acc, next) => {
-      const nextStats = next.stats()
 
-      return {
-        population: acc.population + nextStats.population,
-        females: acc.females + nextStats.females,
-        males: acc.males + nextStats.males
-      }
-    }, {
-      population: 0,
-      females: 0,
-      males: 0
-    })
+  stats() {
+    const stats = new Stats({ males: 0, females: 0 })
+    for (const cohort of this.cohorts) {
+      stats.plus(cohort.stats())
+    }
+
+    return stats
   }
 }
