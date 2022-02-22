@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require("../dist/index").default
+require("../dist/cli").default

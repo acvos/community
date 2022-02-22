@@ -14,8 +14,6 @@ export class Cohort {
     this.fertility = config.fertility || 0 // Positive number: children per women per step
     this.health = config.health || 0       // Positive number between 0 and 100: opposite to mortality
   }
-  // const next = i + this.seed.years_per_step
-  // const name = next > this.seed.max_age ? `greater_than_${i}` : `${i} to ${next}`
 
   get males() {
     return Math.round(this.population * this.maleRatio / (1 + this.maleRatio))
