@@ -34,7 +34,9 @@ export class Cohort {
 
     const mortality = (100 - this.health) / 100
     const deaths = Math.ceil(this.population * mortality)
-    this.population = this.population - deaths
+    this.population = deaths > 0 && deaths < this.population
+      ? this.population - deaths
+      : 0
   }
 
   stats() {
