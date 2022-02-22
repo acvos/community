@@ -1,8 +1,8 @@
 {
-  "name": "community",
-  "version": "0.0.0",
+  "name": "@acvos/community",
+  "version": "1.0.0",
   "description": "Dynamic Community: Population dynamics modelling tool",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "main": "dist",
   "bin": {
     "community": "bin/community.js"
