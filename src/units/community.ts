@@ -1,4 +1,3 @@
-import { randomNumber } from "../utils/random-value"
 import { Stats } from "../utils/stats"
 import { Cohort } from "./cohort"
 
@@ -19,19 +18,19 @@ export class Community {
     this.cohorts = [...cohorts]
   }
 
-  run(years: number) {
+  elapse(years: number) {
+    let newborns = 0
+
+    // Existing cohorts produce children age by the given number of years
     for (const cohort of this.cohorts) {
-      cohort.run(years)
+      newborns += cohort.procreate()
+      cohort.elapse(years)
     }
 
-    // New cohort is born each step
-    const fertility = 0.05
-    const newborns = Math.round(fertility * this.stats().total)
-    const male = randomNumber(0, newborns)
-    const female = newborns - male
-    this.cohorts.unshift(new Cohort({ male, female }))
+    // New cohort is born
+    this.cohorts.unshift(new Cohort({ population: newborns }))
 
-    // The oldest cohort always dies each step
+    // The oldest cohort always dies
     this.cohorts.pop()
   }
 

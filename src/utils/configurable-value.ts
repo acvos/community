@@ -10,7 +10,7 @@ export class ConfigurableValue<T> {
 
   getValue() {
     return typeof this.config === "object"
-      ? randomNumber(this.config["from"], this.config["to"])
+      ? randomNumber(this.config)
       : this.config
   }
 }

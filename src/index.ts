@@ -25,7 +25,7 @@ function run(configPath, command) {
   for (let run = 1; run <= runs; run++) {
     let community = model.createCommunity(`${name}_${run}`)
     for (let year = 0; year < years; year += step) {
-      community.run(step)
+      community.elapse(step)
       console.log(util.inspect(community, false, 1000, true))
     }
 

@@ -3,7 +3,7 @@ export type Option<T> = {
   weight?: number
 }
 
-export function randomNumber(from: number, to: number) {
+export function randomNumber({ from, to }: { from: number, to: number }) {
   const range = to - from
   const raw = Math.random() * range
   const value = from + Math.round(raw)
@@ -25,7 +25,7 @@ export function randomOption<T>(...options: Array<Option<T>|T>) {
     }
   }
 
-  const key = randomNumber(0, weightedValues.length - 1)
+  const key = randomNumber({ from: 0, to: weightedValues.length - 1 })
   const value = weightedValues[key]
 
   return value
