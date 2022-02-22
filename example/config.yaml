@@ -1,0 +1,57 @@
+seed:
+  years_per_step: 5
+  male_to_female_ratio: 1
+  max_age: 90
+  households:
+    count: 46
+    size: { from: 2, to: 8 }
+    age: { from: 0, to: 45 }
+
+rules:
+  no_kids_before_15:
+    type: SetProperty
+    property: fertility
+    conditions: age < 15
+    value: 0
+
+  childbirth:
+    type: SetProperty
+    property: fertility
+    conditions: age >= 15 && age < 25
+    value: 4
+
+  no_kids_after_25:
+    type: SetProperty
+    property: fertility
+    conditions: age >= 25
+    value: 0
+
+  infant_mortality:
+    type: SetProperty
+    property: health
+    conditions: age < 5
+    value: 75
+
+  child_mortality:
+    type: SetProperty
+    property: health
+    conditions: age >= 5 && age < 15
+    value: 75
+
+  adult_mortality:
+    type: SetProperty
+    property: health
+    conditions: age >= 15 && age < 40
+    value: 90
+
+  mature_mortality:
+    type: SetProperty
+    property: health
+    conditions: age >= 40 && age < 55
+    value: 80
+
+  elderly_mortality:
+    type: SetProperty
+    property: health
+    conditions: age >= 55
+    value: 50
