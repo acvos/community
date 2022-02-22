@@ -1,9 +1,11 @@
+import { Range } from "../types"
+
 export type Option<T> = {
   value: T
   weight?: number
 }
 
-export function randomNumber({ from, to }: { from: number, to: number }) {
+export function randomNumber({ from, to }: Range<number>) {
   const range = to - from
   const raw = Math.random() * range
   const value = from + Math.round(raw)

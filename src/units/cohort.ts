@@ -12,7 +12,7 @@ export class Cohort {
     this.population = config.population || 0
     this.maleRatio = config.maleRatio || 1
     this.fertility = config.fertility || 0 // Positive number: children per women per step
-    this.health = config.health || 75      // Positive number between 1 and 100: opposite to mortality
+    this.health = config.health || 0       // Positive number between 0 and 100: opposite to mortality
   }
   // const next = i + this.seed.years_per_step
   // const name = next > this.seed.max_age ? `greater_than_${i}` : `${i} to ${next}`
@@ -35,12 +35,6 @@ export class Cohort {
     const mortality = (100 - this.health) / 100
     const deaths = Math.ceil(this.population * mortality)
     this.population = this.population - deaths
-
-    if (this.age >= 15 && this.age <= 30) {
-      this.fertility = 4
-    } else {
-      this.fertility = 0
-    }
   }
 
   stats() {

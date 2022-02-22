@@ -19,7 +19,6 @@
   "dependencies": {
     "commander": "^9.0.0",
     "jexl": "^2.3.0",
-    "poly-map": "^2.2.8",
     "string-template": "^1.0.0",
     "uuid": "^8.3.2",
     "yaml": "^1.10.0"

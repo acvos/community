@@ -1,7 +1,7 @@
-import { Range } from "./types"
+import { Range, Rule } from "./types"
+import { randomNumber } from "./utils/random-value"
 import { Cohort } from "./units/cohort"
 import { Community } from "./units/community"
-import { randomNumber } from "./utils/random-value"
 
 interface Seed {
   years_per_step: number
@@ -30,7 +30,7 @@ export class UnitGenerator {
     return cohorts
   }
 
-  createCommunity(name: string) {
+  createCommunity(name: string, rules: Array<Rule<any>>) {
     const cohorts = this.seedCohorts()
 
     // Seed each household independently, add results to the community profile
@@ -45,6 +45,6 @@ export class UnitGenerator {
       }
     }
 
-    return new Community({ name, cohorts, numberOfHouseholds })
+    return new Community({ name, cohorts, numberOfHouseholds, rules })
   }
 }

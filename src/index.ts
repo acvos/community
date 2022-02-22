@@ -1,18 +1,27 @@
 import { program } from "commander"
 import path from "path"
-import map from "poly-map"
-import { Event } from "./types"
+import { Rule } from "./types"
 import { readConfig } from "./config"
-import { createEvent } from "./events"
+import { compiler } from "./compiler"
 import { UnitGenerator } from "./unit-generator"
-import util from "util"
+import * as ruleTypes from "./rules"
+
+function createRule(type, args, conditions = "true"): Rule<any> {
+  const Klass = ruleTypes[type]
+  if (!Klass) {
+    throw new Error(`Unsupported rule type: ${type}`)
+  }
+
+  const condition = compiler.compile(conditions)
+
+  return new Klass(args, x => condition.evalSync(x))
+}
 
 function run(configPath, command) {
   const config = readConfig(path.resolve(process.cwd(), configPath))
 
-  // const events = <Array<Event<any>>>Object.values(
-  //   map(({ type, params, conditions }) => createEvent(type, params, conditions), config.events)
-  // )
+  const rules = Object.values(config.rules)
+    .map(({ type, conditions, ...params }) => createRule(type, params, conditions))
 
   const name = command.name
   const runs = parseInt(command.runs)
@@ -23,10 +32,9 @@ function run(configPath, command) {
   console.log(`Simulating ${name} ${runs} times...`)
 
   for (let run = 1; run <= runs; run++) {
-    let community = model.createCommunity(`${name}_${run}`)
+    const community = model.createCommunity(`${name}_${run}`, rules)
     for (let year = 0; year < years; year += step) {
       community.elapse(step)
-      console.log(util.inspect(community, false, 1000, true))
     }
 
     console.log(`Run ${run}, Year ${years}`, community.stats())
