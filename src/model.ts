@@ -15,7 +15,7 @@ function createRule(type, args, conditions = "true"): Rule<any> {
 }
 
 export class Model {
-  private name: string
+  name: string
   private step: number
   private rules: Array<Rule<any>>
   private generator: UnitGenerator
@@ -29,15 +29,19 @@ export class Model {
   }
 
   run(years: number, runs: number) {
-    console.log(`Simulating ${this.name} ${runs} times...`)
-
+    const history = []
     for (let run = 1; run <= runs; run++) {
       const community = this.generator.createCommunity(`${this.name}_${run}`, this.rules)
+      const historyLine = {}
       for (let year = 0; year < years; year += this.step) {
+        historyLine[`year_${year}`] = community.stats().total
         community.elapse(this.step)
       }
 
+      history.push(historyLine)
       console.log(`Run ${run}, Year ${years}`, community.stats())
     }
+
+    return history
   }
 }
